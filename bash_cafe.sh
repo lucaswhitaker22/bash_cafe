@@ -65,15 +65,6 @@ open_shop () {
 }
 
 
-start_shop () {
-    echo "You just bought a coffee shop on a local street"
-    echo "By evaluating the weather, you can determine how many visitors you may have"
-    echo "Upgrade your shop to increase the number of visitors"
-    echo "What would you like to name your shop?"
-    read -r name
-}
-
-
 calculate_profit () {
     weather=$1
     cost=$2
@@ -158,3 +149,4 @@ clear
     clear
     save
 done
+
