@@ -2,9 +2,9 @@
 #"\e[31m \e[0m"
 . C:/cygwin/style.sh
 
-day_num=1
+day_num=6
 expense=1
-
+sales_mult=1
 cash=100
 mult=0
 start_time=$(date +"%s")
@@ -21,6 +21,20 @@ center () {
         echo "$str"
     fi
 
+}
+FILE="save.txt"
+
+save () {
+     > $FILE
+    echo "day_num=$day_num" >> $FILE
+    echo "cash=$cash" >> $FILE
+    echo "sales_mult=$sales_mult" >> $FILE
+}
+load () {
+    saved_data=$(cat $FILE)
+    day_num=$(grep "day_num" <<< $saved_data|awk -F "=" '{print $2}')
+    cash=$(grep "cash" <<< $saved_data|awk -F "=" '{print $2}')
+    sales_mult=$(grep "sales_mult" <<< $saved_data|awk -F "=" '{print $2}')
 }
 open_shop () {
     m=15
@@ -67,7 +81,12 @@ calculate_profit () {
     echo count: $count
     #calculate # of sales
     mult=$(( 5+$RANDOM%10 ))
-    sales=$(( $(($((weather-20))*10 - mult*cost))/2 ))
+    sales1=$(( $(($((weather-20))*10 - mult*cost))/2 ))
+    echo sales_before_bonus: $sales1
+    sales=$(( $(( $(($((weather-20))*10 - mult*cost))/2 ))*sales_mult))
+    if [[ ! $sales -gt 0 ]]; then
+        sales=0
+    fi
     echo sales: $sales
     #calculate income
     if (( sales > count )); then
@@ -80,6 +99,12 @@ calculate_profit () {
     profit=$(( income-count-$((sales/2)) ))
     return $profit
 }
+
+read -p "Would you like to load your saved game? (y/n) >>> " input
+if [[ $input == "y" ]]; then
+    load
+fi
+clear
 
 name="Coffee Shop"
 #start_shop
@@ -113,19 +138,23 @@ clear
             break  
         fi
     done
-    
-    echo "Press enter to open shop: "
-    read -r
+    read -p "Press enter to open shop: "
     clear
-    
     open_shop
     echo -e "\e[1;7m Day $day_num: Summary \e[0m"    
     calculate_profit $weather $coffee_cost $coffee_cnt
     echo "Profit: $profit"
     cash=$(( $cash+$profit ))
+    
+        if ! (( $day_num % 7 )) ; then
+            cash=$(( cash-50 ))
+            echo ""
+            echo -e "\e[31mYou paid $"50" in weekly bills\e[0m"
+        fi
+    
     day_num=$(( day_num+1 ))
     echo ""
-    echo "Press enter to continue: "
-    read -r
+    read -p "Press enter to continue: "
     clear
+    save
 done
