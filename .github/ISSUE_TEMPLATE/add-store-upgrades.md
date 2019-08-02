@@ -7,9 +7,6 @@ assignees: ''
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
-
 Right after the day summary is cleared from the terminal, add a menu for the users to purchase upgrades. Make sure that they cannot buy an upgrade if they cannot afford it. For the time being, just add one upgrade option that increases the sales_mult variable by 1. Increase the cost of upgrades as time progresses.
 
 Bonus:
