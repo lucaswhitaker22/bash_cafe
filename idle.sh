@@ -67,7 +67,7 @@ calculate_profit () {
     echo count: $count
     #calculate # of sales
     mult=$(( 5+$RANDOM%10 ))
-    sales=$(( $((weather*2 - mult*cost))/2 ))
+    sales=$(( $(($((weather-20))*10 - mult*cost))/2 ))
     echo sales: $sales
     #calculate income
     if (( sales > count )); then
@@ -77,7 +77,7 @@ calculate_profit () {
     fi
     echo income: $income
     #calculate profit
-    profit=$(( income-count ))
+    profit=$(( income-count-$((sales/2)) ))
     return $profit
 }
 
