@@ -1,5 +1,5 @@
 #!/bin/bash
-#"\e[31m \e[0m"
+#!/usr/bin/env bash
 . C:/cygwin/style.sh
 
 day_num=6
