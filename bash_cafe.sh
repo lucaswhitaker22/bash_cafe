@@ -1,15 +1,20 @@
 #!/bin/bash
 #!/usr/bin/env bash
 
+#counts the date
 day_num=1
+#expense is the cost of making a single coffee
 expense=1
+#sales_mult multiplies the number of sales everyday, can be increased using upgrades (not added yet)
 sales_mult=1
+#cash user has to spend
 cash=100
-mult=0
 
 center () {
+    #get size of terminal window
     width=$(tput cols)
     height=$(tput lines)
+    #center cursor into center of terminal and echo
     str="$1"
     length=${#str}
     tput cup $((height / 2)) $(((width / 2) - (length / 2)))
@@ -30,7 +35,9 @@ save () {
 }
 load () {
     #TODO if there is no saved game, create new
+    #check if save file exists
     if [[ $(ls) == *"save.txt"* ]]; then
+        #load saves file, parse its content into global variables
         saved_data=$(cat $FILE)
         day_num=$(grep "day_num" <<< "$saved_data"|awk -F "=" '{print $2}')
         cash=$(grep "cash" <<< "$saved_data"|awk -F "=" '{print $2}')
@@ -43,6 +50,7 @@ load () {
 
 }
 open_shop () {
+    #displays simple timer
     m=15
     h=9
     t="am"
@@ -81,14 +89,14 @@ calculate_profit () {
     if [[ ! $sales -gt 0 ]]; then
         sales=0
     fi
-    echo sales: $sales
+    echo "Sales: $sales"
     #calculate income
     if (( sales > count )); then
         income=$(( count*cost ))
     else
         income=$(( sales*cost ))
     fi
-    echo income: $income
+    echo "Income: $income"
     #calculate profit
     profit=$(( income-count-$((sales/2)) ))
     return $profit
@@ -100,12 +108,10 @@ if [[ $input == "y" ]]; then
 fi
 clear
 
-#start_shop
-while true
-do
+#main loop
+while true; do
 clear
-    profit=0
-    #tput smul; echo -e " Day $day_num "; tput sgr0
+    #output the day and weather
     center " Day $day_num "
     sleep 1
     tput clear
@@ -113,6 +119,8 @@ clear
     center "Weather: $weather"
     sleep 1
     tput clear
+    
+    #get user input (coffee_cnt and coffee_cost)
     tput rev;echo " Cash: $cash ";tput sgr0
     echo ""
     while true; do
@@ -131,11 +139,16 @@ clear
             break  
         fi
     done
+    
+    #opens shop, displays clock and calculates profit
     read -p "Press enter to open shop: "
     clear
     open_shop
-    echo -e "\e[1;7m Day $day_num: Summary \e[0m"    
+    echo -e "\e[1;7m Day $day_num: Summary \e[0m"  
+    profit=0    
     calculate_profit "$weather" "$coffee_cost" "$coffee_cnt"
+    
+    #display the days summary
     echo "Profit: $profit"
     cash=$(( cash+profit ))
     
@@ -147,6 +160,7 @@ clear
     
     day_num=$(( day_num+1 ))
     echo ""
+    
     read -p "Press enter to continue: "
     clear
     save
