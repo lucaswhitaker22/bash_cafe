@@ -1,0 +1,3 @@
+day_num=2
+cash=80
+sales_mult=1
