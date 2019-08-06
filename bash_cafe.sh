@@ -1,6 +1,5 @@
 #!/bin/bash
 #!/usr/bin/env bash
-. C:/cygwin/style.sh
 
 day_num=6
 expense=1
