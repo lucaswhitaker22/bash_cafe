@@ -11,3 +11,6 @@ calculated by subtracting the cost of making the coffee and running your store.
 
 The goal of the game is to predict how many coffees your need to make and how much to charge based off the temperature outside
 (since everyone loves AC when its hot out). As the days progress, your goal is to make as much money as possible.
+
+### Instructions
+First, download this repository locally. To run, open up you terminal and change directory to "scripts" ( cd /bash_cafe/scripts ). Run bash_cafe.sh (./bash_cafe.sh) to start playing.
