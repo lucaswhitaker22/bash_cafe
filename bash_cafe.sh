@@ -30,10 +30,17 @@ save () {
 }
 load () {
     #TODO if there is no saved game, create new
-    saved_data=$(cat $FILE)
-    day_num=$(grep "day_num" <<< "$saved_data"|awk -F "=" '{print $2}')
-    cash=$(grep "cash" <<< "$saved_data"|awk -F "=" '{print $2}')
-    sales_mult=$(grep "sales_mult" <<< "$saved_data"|awk -F "=" '{print $2}')
+    if [[ $(ls) == *"save.txt"* ]]; then
+        saved_data=$(cat $FILE)
+        day_num=$(grep "day_num" <<< "$saved_data"|awk -F "=" '{print $2}')
+        cash=$(grep "cash" <<< "$saved_data"|awk -F "=" '{print $2}')
+        sales_mult=$(grep "sales_mult" <<< "$saved_data"|awk -F "=" '{print $2}')
+        return 0
+    fi
+        echo "There is no previous save"
+        sleep 1
+        return 1
+
 }
 open_shop () {
     m=15
@@ -70,7 +77,6 @@ calculate_profit () {
     count=$3
     #calculate # of sales
     mult=$(( 5+RANDOM%10 ))
-    sales1=$(( $(($((weather-20))*10 - mult*cost))/2 ))
     sales=$(( $(( $(($((weather-20))*10 - mult*cost))/2 ))*sales_mult))
     if [[ ! $sales -gt 0 ]]; then
         sales=0
@@ -110,22 +116,22 @@ clear
     tput rev;echo " Cash: $cash ";tput sgr0
     echo ""
     while true; do
-        read -r "How many coffees do you wish make? >>> " coffee_cnt
-        if (( coffee_cnt*expense > cash)) || [ -n "${coffee_cnt##[0-9]*}" ]; then
+        read -p "How many coffees do you wish make? >>> " coffee_cnt
+        if (( coffee_cnt*expense > cash)) || [ ! -z "${coffee_cnt##[0-9]*}" ]; then
             echo "You cannot do that!"
         else
             break
         fi
     done
     while true; do
-        read -r "How much do you wish to charge per coffee? >>> " coffee_cost
-        if [ -n "${coffee_cost##[0-9]*}" ]; then
+        read -p "How much do you wish to charge per coffee? >>> " coffee_cost
+        if [ ! -z "${coffee_cost##[0-9]*}" ]; then
             echo "You cannot do that!"
         else
             break  
         fi
     done
-    read -r "Press enter to open shop: "
+    read -p "Press enter to open shop: "
     clear
     open_shop
     echo -e "\e[1;7m Day $day_num: Summary \e[0m"    
@@ -136,7 +142,7 @@ clear
         if ! (( day_num % 7 )) ; then
             cash=$(( cash-50 ))
             echo ""
-            echo -e "\e[31mYou paid /$50 in weekly bills\e[0m"
+            echo -e "\e[31mYou paid '$'50 in weekly bills\e[0m"
         fi
     
     day_num=$(( day_num+1 ))
