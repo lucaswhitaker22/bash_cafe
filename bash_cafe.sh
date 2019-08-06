@@ -9,6 +9,8 @@ expense=1
 sales_mult=1
 #cash user has to spend
 cash=100
+shop_name=""
+SAVE_FILE=""
 
 center () {
     #get size of terminal window
@@ -25,30 +27,57 @@ center () {
     fi
 
 }
-FILE="save.txt"
 
+new_save () {
+while true; do
+    read -p "What would you like to name your shop? >>> " shop_name
+    if [[ $shop_name =~ [^a-zA-Z0-9_-] ]]; then
+        echo "Shop name contains invalid characters, please try again!"
+    else
+        break
+    fi
+done
+}
+
+#outputs the list of saves in folder
+get_saves () {
+    saves=($(ls|grep "_save.txt"|awk -F "_save.txt" '{print $1}'))
+    echo -e "\e[4m Your shops: \e[0m"
+    for i in "${saves[@]}"; do
+    echo " - $i"
+    done
+}
+
+#creates new save file and writes to it
 save () {
+    FILE="$shop_name"_save.txt
     > $FILE
     echo "day_num=$day_num" >> $FILE
     echo "cash=$cash" >> $FILE
     echo "sales_mult=$sales_mult" >> $FILE
 }
-load () {
-    #TODO if there is no saved game, create new
-    #check if save file exists
-    if [[ $(ls) == *"save.txt"* ]]; then
-        #load saves file, parse its content into global variables
-        saved_data=$(cat $FILE)
-        day_num=$(grep "day_num" <<< "$saved_data"|awk -F "=" '{print $2}')
-        cash=$(grep "cash" <<< "$saved_data"|awk -F "=" '{print $2}')
-        sales_mult=$(grep "sales_mult" <<< "$saved_data"|awk -F "=" '{print $2}')
-        return 0
-    fi
-        echo "There is no previous save"
-        sleep 1
-        return 1
 
+#asks user which load to open and reads it
+load () {
+    #get list of save files
+    get_saves
+    #check if save file exists
+    while true; do
+        read -p "Which shop would you like to load? >>> " input
+        save_file=$input"_save.txt"
+        if [[ $(ls) == *"$save_file"* ]]; then
+            #load saves file, parse its content into global variables
+            saved_data=$(cat $save_file)
+            day_num=$(grep "day_num" <<< "$saved_data"|awk -F "=" '{print $2}')
+            cash=$(grep "cash" <<< "$saved_data"|awk -F "=" '{print $2}')
+            sales_mult=$(grep "sales_mult" <<< "$saved_data"|awk -F "=" '{print $2}')
+            break
+        fi
+            echo "This shop does not exist"
+            sleep 1
+    done
 }
+
 open_shop () {
     #displays simple timer
     m=15
@@ -78,7 +107,6 @@ open_shop () {
     done
 }
 
-
 calculate_profit () {
     weather=$1
     cost=$2
@@ -105,6 +133,8 @@ calculate_profit () {
 read -p "Would you like to load your saved game? (y/n) >>> " input
 if [[ $input == "y" ]]; then
     load
+else
+    new_save
 fi
 clear
 
