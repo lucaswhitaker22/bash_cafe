@@ -1,7 +1,7 @@
 #!/bin/bash
 #!/usr/bin/env bash
 
-day_num=6
+day_num=1
 expense=1
 sales_mult=1
 cash=100
@@ -23,12 +23,13 @@ center () {
 FILE="save.txt"
 
 save () {
-    true > $FILE
+    > $FILE
     echo "day_num=$day_num" >> $FILE
     echo "cash=$cash" >> $FILE
     echo "sales_mult=$sales_mult" >> $FILE
 }
 load () {
+    #TODO if there is no saved game, create new
     saved_data=$(cat $FILE)
     day_num=$(grep "day_num" <<< "$saved_data"|awk -F "=" '{print $2}')
     cash=$(grep "cash" <<< "$saved_data"|awk -F "=" '{print $2}')
@@ -87,7 +88,7 @@ calculate_profit () {
     return $profit
 }
 
-read -r "Would you like to load your saved game? (y/n) >>> " input
+read -p "Would you like to load your saved game? (y/n) >>> " input
 if [[ $input == "y" ]]; then
     load
 fi
@@ -135,7 +136,7 @@ clear
         if ! (( day_num % 7 )) ; then
             cash=$(( cash-50 ))
             echo ""
-            echo -e "\e[31mYou paid /$50" in weekly bills\e[0m"
+            echo -e "\e[31mYou paid /$50 in weekly bills\e[0m"
         fi
     
     day_num=$(( day_num+1 ))
