@@ -47,7 +47,7 @@ clear
 
 #main loop
 while true; do
-clear
+    clear
     #output the day and weather
     center " Day $day_num "
     sleep 1
@@ -64,6 +64,8 @@ clear
         read -p "How many coffees do you wish make? >>> " coffee_cnt
         if (( coffee_cnt*expense > cash)) || [ ! -z "${coffee_cnt##[0-9]*}" ]; then
             echo "You cannot do that!"
+	elif [ -z "$coffee_cnt" ]; then
+	    :
         else
             break
         fi
@@ -72,6 +74,8 @@ clear
         read -p "How much do you wish to charge per coffee? >>> " coffee_cost
         if [ ! -z "${coffee_cost##[0-9]*}" ]; then
             echo "You cannot do that!"
+	elif [ -z "$coffee_cnt" ]; then
+	    :
         else
             break  
         fi
