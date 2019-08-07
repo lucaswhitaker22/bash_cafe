@@ -1,5 +1,8 @@
 #!/bin/bash
 #!/usr/bin/env bash
+. functions/save_load_functions.sh
+#get input from user
+
 
 center () {
     #get size of terminal window
@@ -44,4 +47,63 @@ open_shop () {
         sleep 0.01
         clear
     done
+}
+
+day_menu () {
+    #displays menu options and gets user input
+    tput clear
+    title="Day Options"
+    in=$2
+    options="Continue,Upgrade,Save_Game,Load_Game,Exit"
+    arr=$(echo $options | tr "," "\n")
+    x=0
+    y=0
+    
+    tput cup $y $x
+    tput rev;echo " $title "; tput sgr0
+    y=$((y+2))
+    i=0
+    for n in $arr
+    do
+        tput cup $(( y+$i )) $x
+            str="$n" 
+            echo "$((i+1)). $str"
+        i=$((i+1))
+    done
+    tput cup $(( y+$i+1 )) $x
+    while true; do
+        read -p "Enter your choice [1-$i] >>> " choice
+        if (( $choice < 1 )) || (( $choice > $i )); then
+            echo "Invalid choice!"
+        else
+            return $choice
+        fi
+    done
+}
+
+menu_cases () {
+    clear
+    case "$1" in
+    #Continue: save game then continue
+    1)  save
+        return 1 ;;
+    #Upgrade: work in progress
+    2)  echo "Upgrade feature: WIP"
+        sleep 1
+        save
+        return 2 ;;
+    #Save_Game: Get save name and create save
+    3)  new_save
+        save
+        return 3 ;;
+    #Load_Game: Save current session then load new game
+    4)  save
+        load
+        return 4 ;;
+    #Exit: Save current session then exit
+    5)  save
+        exit 0 ;;
+    *)  echo "ERROR" 
+        exit 1 ;;
+    esac
 }

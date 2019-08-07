@@ -21,6 +21,7 @@ if [[ $input == "y" ]]; then
     load
 else
     new_save
+    save
 fi
 clear
 
@@ -44,6 +45,7 @@ while true; do
         if (( coffee_cnt*expense > cash)) || [ ! -z "${coffee_cnt##[0-9]*}" ]; then
             echo "You cannot do that!"
         elif [ -z "$coffee_cnt" ]; then
+            echo "invalid!"
 	    :
         else
             break
@@ -77,11 +79,13 @@ while true; do
             echo ""
             echo -e "\e[31mYou paid '$'50 in weekly bills\e[0m"
         fi
-    
     day_num=$(( day_num+1 ))
     echo ""
     
     read -p "Press enter to continue: "
     clear
-    save
+    #get next action from user
+    day_menu
+    #case statement for menu return
+    menu_cases $?
 done
