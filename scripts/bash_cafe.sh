@@ -1,8 +1,10 @@
 #!/bin/bash
 #!/usr/bin/env bash
-. save_load_functions.sh
-. user_interface_functions.sh
-
+. functions/save_load_functions.sh
+. functions/menu_functions.sh
+. functions/calculation_functions.sh
+. functions/weather_functions.sh
+. functions/upgrade_functions.sh
 #counts the date
 day_num=1
 #expense is the cost of making a single coffee
@@ -13,29 +15,6 @@ sales_mult=1
 cash=100
 shop_name=""
 SAVE_FILE=""
-
-calculate_profit () {
-    weather=$1
-    cost=$2
-    count=$3
-    #calculate # of sales
-    mult=$(( 5+RANDOM%10 ))
-    sales=$(( $(( $(($((weather-20))*10 - mult*cost))/2 ))*sales_mult))
-    if [[ ! $sales -gt 0 ]]; then
-        sales=0
-    fi
-    echo "Sales: $sales"
-    #calculate income
-    if (( sales > count )); then
-        income=$(( count*cost ))
-    else
-        income=$(( sales*cost ))
-    fi
-    echo "Income: $income"
-    #calculate profit
-    profit=$(( income-count-$((sales/2)) ))
-    return $profit
-}
 
 read -p "Would you like to load your saved game? (y/n) >>> " input
 if [[ $input == "y" ]]; then
@@ -64,7 +43,7 @@ while true; do
         read -p "How many coffees do you wish make? >>> " coffee_cnt
         if (( coffee_cnt*expense > cash)) || [ ! -z "${coffee_cnt##[0-9]*}" ]; then
             echo "You cannot do that!"
-	elif [ -z "$coffee_cnt" ]; then
+        elif [ -z "$coffee_cnt" ]; then
 	    :
         else
             break
