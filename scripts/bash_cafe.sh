@@ -1,10 +1,10 @@
-#!/bin/bash
 #!/usr/bin/env bash
-. functions/save_load_functions.sh
+. saves/save_load_functions.sh
 . functions/menu_functions.sh
 . functions/calculation_functions.sh
 . functions/weather_functions.sh
 . functions/upgrade_functions.sh
+
 #counts the date
 day_num=1
 #expense is the cost of making a single coffee
@@ -16,19 +16,9 @@ cash=100
 shop_name=""
 SAVE_FILE=""
 
-get_saves
-if [[ $? == 0 ]]; then
-    read -p "Would you like to load your saved game? (y/n) >>> " input
-    if [[ $input == "y" ]]; then
-        load
-    else
-        new_save
-        save
-    fi
-else
-    new_save
-    save
-fi
+#asks users to load old sessions or create new session (in menu_functions)
+begin
+#refer to save_load_functions to see save/load functions
 
 #main loop
 while true; do
@@ -38,6 +28,7 @@ while true; do
     sleep 1
     tput clear
     weather=$(( 20+RANDOM%15 ))
+    #centers cursor and outputs text in middle of terminal (in menu_functions)
     center "Weather: $weather"
     sleep 1
     tput clear
@@ -69,9 +60,11 @@ while true; do
     #opens shop, displays clock and calculates profit
     read -p "Press enter to open shop: "
     clear
+    #Displays clock/timer (in menu_functions)
     open_shop
     echo -e "\e[1;7m $shop_name on Day $day_num \e[0m"  
     profit=0    
+    #in calculation_functions
     calculate_profit "$weather" "$coffee_cost" "$coffee_cnt"
     
     #display the days summary
@@ -88,8 +81,8 @@ while true; do
     
     read -p "Press enter to continue: "
     clear
-    #get next action from user
+    #get next action from user (in menu_functions)
     day_menu
-    #case statement for menu return
-    menu_cases $?
+    #case statement for menu return (in menu_functions)
+    handle_menu $?
 done

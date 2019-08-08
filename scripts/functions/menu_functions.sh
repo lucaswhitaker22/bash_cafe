@@ -1,8 +1,5 @@
-#!/bin/bash
 #!/usr/bin/env bash
-. functions/save_load_functions.sh
-#get input from user
-
+. saves/save_load_functions.sh
 
 center () {
     #get size of terminal window
@@ -18,6 +15,28 @@ center () {
         echo "$str"
     fi
 
+}
+
+#functions get_save, new_save, save, and load are in save_load_functions
+begin () {
+    #gets all saves from file and puts them in array
+    get_saves
+    #return of 0 means theres are previous save files to open
+    if [[ $? == 0 ]]; then
+        read -p "Would you like to load your saved game? (y/n) >>> " input
+        if [[ $input == "y" ]]; then
+            clear
+            #opens save file and writes data into global variables
+            load
+        else
+            #
+            new_save
+            save
+        fi
+    else
+        new_save
+        save
+    fi
 }
 
 open_shop () {
@@ -81,7 +100,9 @@ day_menu () {
     done
 }
 
-menu_cases () {
+#handle input from user after menu is displayed
+#save, new_save, and load are in save_load_functions.sh
+handle_menu () {
     clear
     case "$1" in
     #Continue: save game then continue
