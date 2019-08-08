@@ -16,14 +16,19 @@ cash=100
 shop_name=""
 SAVE_FILE=""
 
-read -p "Would you like to load your saved game? (y/n) >>> " input
-if [[ $input == "y" ]]; then
-    load
+get_saves
+if [[ $? == 0 ]]; then
+    read -p "Would you like to load your saved game? (y/n) >>> " input
+    if [[ $input == "y" ]]; then
+        load
+    else
+        new_save
+        save
+    fi
 else
     new_save
     save
 fi
-clear
 
 #main loop
 while true; do
@@ -36,7 +41,6 @@ while true; do
     center "Weather: $weather"
     sleep 1
     tput clear
-    
     #get user input (coffee_cnt and coffee_cost)
     tput rev;echo " Cash: $cash ";tput sgr0
     echo ""
@@ -66,7 +70,7 @@ while true; do
     read -p "Press enter to open shop: "
     clear
     open_shop
-    echo -e "\e[1;7m Day $day_num: Summary \e[0m"  
+    echo -e "\e[1;7m $shop_name on Day $day_num \e[0m"  
     profit=0    
     calculate_profit "$weather" "$coffee_cost" "$coffee_cnt"
     

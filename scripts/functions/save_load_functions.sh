@@ -19,11 +19,7 @@ get_saves () {
     if [[ -z "$saves" ]]; then
         return 1
     fi    
-    echo -e "\e[4m Your shops: \e[0m"
-    for i in "${saves[@]}"; do
-        echo " - $i"
-    done
-    return 0
+    return 0 
 }
 
 #creates new save file and writes to it
@@ -38,12 +34,10 @@ save () {
 #asks user which load to open and reads it
 load () {
     #get list of save files
-    get_saves
-    if [[ $? == 1 ]]; then
-        echo "There are no saves to load"
-        new_save
-        return 0
-    fi
+    echo -e "\e[4m Your shops: \e[0m"
+    for i in "${saves[@]}"; do
+        echo " - $i"
+    done
     #check if save file exists
     while true; do
         read -p "Which shop would you like to load? >>> " input
