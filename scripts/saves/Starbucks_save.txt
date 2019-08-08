@@ -1,3 +1,0 @@
-day_num=4
-cash=57
-sales_mult=1
