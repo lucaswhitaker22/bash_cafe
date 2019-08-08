@@ -1,3 +1,0 @@
-day_num=1
-cash=100
-sales_mult=1
