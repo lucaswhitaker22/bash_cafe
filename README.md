@@ -1,10 +1,11 @@
-![alt text](/assets/img/logo_header.png)\
+![alt text](/assets/img/logo_header.png)
+
 Bash Cafe is a text-based business simulation game written in Bash where players run a coffee shop. Bash Cafe is losely based off the 1979 game "Lemonade Stand" for DOS.
 
 Run in a unix shell. Change directory to _**/scripts**_ and run using:
 `./bash_cafe.sh`
 
-**Refer to the wiki page for more information**\
+**Refer to the wiki page for more information**
 [Bash Cafe Wiki](https://github.com/lucaswhitaker22/bash_cafe/wiki)
 
 ### How it Works
