@@ -16,7 +16,7 @@ Then, the number of sales is calculated based off temperature and cost. The inco
 calculated by subtracting the cost of making the coffee and running your store.
 
 The goal of the game is to predict how many coffees your need to make and how much to charge based off the temperature outside
-(since everyone loves AC when its hot out). As the days progress, your goal is to make as much money as possible.
+(since everyone loves an air conditioned cafe when its hot out). As the days progress, your goal is to make as much money as possible.
 
 ### Contribute
 If you are reading this, you should contribute! Even if you do not know how to code, leave feedback and add to the issues. Either way, refer to [Bash Cafe Wiki Contributor Page](https://github.com/lucaswhitaker22/bash_cafe/wiki/Contributors).
